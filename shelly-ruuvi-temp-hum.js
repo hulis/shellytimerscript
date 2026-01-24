@@ -113,29 +113,28 @@ function evaluateSensor() {
  ***********************/
 BLE.Scanner.Start({
   duration_ms: 0,
-  active: true
-});
+  active: true,
+  onScan: function (res) {
+    if (!res.addr || res.addr !== RUUVI_MAC) return;
+    if (!res.service_data || !res.service_data["FEAA"]) return;
 
-BLE.Scanner.onScan(function (res) {
-  if (!res.addr || res.addr !== RUUVI_MAC) return;
-  if (!res.service_data || !res.service_data["FEAA"]) return;
+    let data = res.service_data["FEAA"];
+    let bytes = data.slice(4);
 
-  let data = res.service_data["FEAA"];
-  let bytes = data.slice(4);
+    // Temperature (°C)
+    let tRaw = (bytes[0] << 8) | bytes[1];
+    if (tRaw & 0x8000) tRaw -= 0x10000;
+    temperature = tRaw / 200.0;
 
-  // Temperature
-  let tRaw = (bytes[0] << 8) | bytes[1];
-  if (tRaw & 0x8000) tRaw -= 0x10000;
-  temperature = tRaw / 200.0;
+    // Humidity (%)
+    let hRaw = (bytes[2] << 8) | bytes[3];
+    humidity = hRaw / 400.0;
 
-  // Humidity
-  let hRaw = (bytes[2] << 8) | bytes[3];
-  humidity = hRaw / 400.0;
+    lastSeen = Date.now();
+    bleAvailable = true;
 
-  lastSeen = Date.now();
-  bleAvailable = true;
-
-  evaluateSensor();
+    evaluateSensor();
+  }
 });
 
 
