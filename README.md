@@ -1,3 +1,5 @@
 # shellytimerscript
 
-Shelly timer script for on/off by setting 
+Shelly scripts for temperature and humidity control with RuuviTag
+
+Just copy-paste to shellyplug script and update RuuviTag MAC address.
