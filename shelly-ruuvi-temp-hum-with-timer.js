@@ -17,6 +17,8 @@ let HUMIDITY_ON_TIME = 1 * 60 * 1000;
 // Fallback
 let FALLBACK_ON_TIME = 1 * 60 * 1000; 
 let FALLBACK_OFF_TIME = 4 * 60 * 1000; 
+
+// Wait BLE for specified time before fallbacking
 let BLE_TIMEOUT = 1 * 60 * 1000; 
 
 let RUUVI_MFD_ID = 0x0499;
