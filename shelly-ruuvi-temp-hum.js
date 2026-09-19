@@ -188,6 +188,7 @@ function initBLE() {
   console.log("BLE scanner started");
   BLE.Scanner.Subscribe(scanCB);
 }
+initBLE();
 
 /***********************
  * BLE TIMEOUT CHECK  *
