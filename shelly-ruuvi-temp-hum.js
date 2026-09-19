@@ -166,13 +166,28 @@ function scanCB(ev,res){
 /***********************
  * BLE INIT           *
  ***********************/
-function initBLE(){
-  const BLEConfig = Shelly.getComponentConfig("ble");
-  if(!BLEConfig.enable){ console.log("Error: Bluetooth not enabled"); return; }
-  if(!BLE.Scanner.isRunning()){ BLE.Scanner.Start({ duration_ms: BLE.Scanner.INFINITE_SCAN, active: false }); }
+function initBLE() {
+  console.log("Initializing BLE...");
+
+  if (BLE.Scanner.isRunning()) {
+    console.log("BLE scanner already running");
+    BLE.Scanner.Subscribe(scanCB);
+    return;
+  }
+
+  let result = BLE.Scanner.Start({
+    duration_ms: BLE.Scanner.INFINITE_SCAN,
+    active: false
+  });
+
+  if (result === null) {
+    console.log("Error: BLE scanner failed to start");
+    return;
+  }
+
+  console.log("BLE scanner started");
   BLE.Scanner.Subscribe(scanCB);
 }
-initBLE();
 
 /***********************
  * BLE TIMEOUT CHECK  *
